@@ -1,11 +1,17 @@
-# `kx`
+# kx
 
-> TODO: description
+Kubernetes application generator.
+
+## Installation
+
+```bash
+npm install -g @blastz/kx
+```
 
 ## Usage
 
-```
-const kx = require('kx');
+### Create new application
 
-// TODO: DEMONSTRATE API
+```bash
+kx create [app-name]
 ```
