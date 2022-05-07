@@ -17,6 +17,8 @@ async function _createChart(
     serviceType: string;
     servicePort: string;
     commonEnv: string[];
+    owner: string;
+    replicaCount: string;
     nodePort?: string;
   },
 ) {
@@ -89,6 +91,8 @@ async function _createChart(
           REPLACE_WITH_SERVICE_TYPE: opts.serviceType,
           REPLACE_WITH_SERVICE_PORT: opts.servicePort,
           REPLACE_WITH_NODE_PORT: opts.nodePort || "",
+          REPLACE_WITH_OWNER: opts.owner,
+          REPLACE_WITH_REPLICA_COUNT: opts.replicaCount,
         },
       }),
     ),
@@ -101,41 +105,67 @@ export async function createChart(name: string) {
       {
         type: "list",
         name: "namespace",
-        message: "The namespace of your application:",
+        message: "The namespace of application:",
         choices: ["easyv", "dtable"],
       },
       {
         type: "input",
         name: "appVersion",
-        message: "The version of your application:",
+        message: "The version of application:",
         default: "0.1.0",
+      },
+      {
+        type: "input",
+        name: "owner",
+        message: "The owner of application:",
+        default: "yinbing",
+      },
+      {
+        type: "input",
+        name: "replicaCount",
+        message: "The replica count of application:",
+        default: "1",
+        validate(input) {
+          if (
+            !input ||
+            Number.isNaN(Number(input)) ||
+            !Number.isInteger(Number(input)) ||
+            input < 1 ||
+            input > 8
+          ) {
+            return "Invalid replica count, it should between 1-8";
+          }
+
+          return true;
+        },
       },
       {
         type: "checkbox",
         name: "commonEnv",
-        message: "Check used common environments by your application:",
+        message: "Check used environments by application:",
         choices: ["postgres", "redis"],
       },
       {
         type: "list",
         name: "serviceType",
-        message: "The service type of your application:",
+        message: "The service type of application:",
         choices: ["ClusterIP", "NodePort"],
       },
       {
         type: "number",
         name: "servicePort",
-        message: "The service port of your application:",
+        message: "The service port of application:",
         default: 80,
       },
       {
         type: "input",
         name: "nodePort",
-        message: "The node port of your application:",
+        message: "The node port of application:",
         validate(input) {
           if (
             !input ||
             Number.isNaN(Number(input)) ||
+            !Number.isInteger(Number(input)) ||
             input < 30000 ||
             input > 32767
           ) {
@@ -154,9 +184,11 @@ export async function createChart(name: string) {
         namespace: answers.namespace,
         appVersion: answers.appVersion,
         serviceType: answers.serviceType,
-        servicePort: answers.servicePort,
-        nodePort: answers.nodePort,
+        servicePort: String(Number(answers.servicePort)),
+        nodePort: String(Number(answers.nodePort)),
         commonEnv: answers.commonEnv,
+        owner: answers.owner,
+        replicaCount: String(Number(answers.replicaCount)),
       });
     });
 }

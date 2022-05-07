@@ -6,9 +6,9 @@ labels:
   env: prod
 
 annotations:
-  contact: ""
+  contact: REPLACE_WITH_OWNER@dtstack.com
 
-replicaCount: 1
+replicaCount: REPLACE_WITH_REPLICA_COUNT
 
 image:
   namespace: REPLACE_WITH_NAMESPACE
