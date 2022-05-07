@@ -1,0 +1,44 @@
+{{- $appName := .Values.appName -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ $appName }}
+  labels:
+    app: {{ $appName }}
+    {{- toYaml .Values.labels | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.annotations | nindent 4 }}
+spec:
+  template:
+    metadata:
+      name: {{ $appName }}
+      labels:
+        app: {{ $appName }}
+    spec:
+      containers:
+        - name: {{ $appName }}
+          {{- with .Values.image }}
+          image: {{ printf "registry-vpc.cn-hangzhou.aliyuncs.com/%s/%s:%s" .namespace .repo .tag }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- if .Values.commonEnv }}
+          env:
+            {{- if has "postgres" .Values.commonEnv }}
+              {{- include "commonEnv.postgres" . | indent 12 }}
+            {{- end }}
+            {{- if has "redis" .Values.commonEnv }}
+              {{- include "commonEnv.redis" . | indent 12 }}
+            {{- end }}
+          {{- end }}
+      imagePullSecrets:
+        - name: easyv-regcred
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+  selector:
+    matchLabels:
+      app: {{ $appName }}
+  replicas: {{ .Values.replicaCount }}

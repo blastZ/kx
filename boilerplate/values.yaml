@@ -1,0 +1,39 @@
+appName: REPLACE_WITH_APP_NAME
+
+namespace: REPLACE_WITH_NAMESPACE
+
+labels:
+  env: prod
+
+annotations:
+  contact: ""
+
+replicaCount: 1
+
+image:
+  namespace: REPLACE_WITH_NAMESPACE
+  repo: REPLACE_WITH_APP_NAME
+  tag: REPLACE_WITH_APP_VERSION
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    memory: "150Mi"
+    cpu: "100m"
+  limits:
+    memory: "800Mi"
+    cpu: "1000m"
+
+volumes:
+  - name: REPLACE_WITH_APP_NAME-config
+    configMap:
+      name: REPLACE_WITH_APP_NAME-config
+      items:
+        - key: config.js
+          path: config.js
+
+volumeMounts:
+  - name: REPLACE_WITH_APP_NAME-config
+    mountPath: /usr/src/app/config.js
+    subPath: config.js
+    readOnly: true

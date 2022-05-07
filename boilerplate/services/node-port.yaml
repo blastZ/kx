@@ -1,0 +1,6 @@
+service:
+  type: NodePort
+  ports:
+    - port: REPLACE_WITH_SERVICE_PORT
+      targetPort: REPLACE_WITH_SERVICE_PORT
+      nodePort: REPLACE_WITH_NODE_PORT
