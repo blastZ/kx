@@ -8,6 +8,7 @@ import { BOILERPLATE_PATH, WSP_PATH } from "../constants/path.constant.js";
 import { replaceFileContent } from "../utils/replace-file-content.util.js";
 import { appendCommonEnv } from "../utils/append-common-env.util.js";
 import { appendService } from "../utils/append-service.util.js";
+import { getSdkVersion } from "../utils/get-sdk-version.util.js";
 
 async function _createChart(
   name: string,
@@ -49,7 +50,7 @@ async function _createChart(
       replaceFileContent({
         filePath: path.resolve(BOILERPLATE_PATH, "./sdk.yaml"),
         replaceMap: {
-          REPLACE_WITH_SDK_VERSION: "0.1.0",
+          REPLACE_WITH_SDK_VERSION: getSdkVersion(),
         },
       }),
     ),
@@ -143,7 +144,7 @@ export async function createChart(name: string) {
         type: "checkbox",
         name: "commonEnv",
         message: "Check used environments by application:",
-        choices: ["postgres", "redis"],
+        choices: ["mysql", "postgres", "redis"],
       },
       {
         type: "list",

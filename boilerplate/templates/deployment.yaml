@@ -27,6 +27,9 @@ spec:
             {{- toYaml .Values.volumeMounts | nindent 12 }}
           {{- if .Values.commonEnv }}
           env:
+            {{- if has "mysql" .Values.commonEnv }}
+              {{- include "commonEnv.mysql" . | indent 12 }}
+            {{- end }}
             {{- if has "postgres" .Values.commonEnv }}
               {{- include "commonEnv.postgres" . | indent 12 }}
             {{- end }}

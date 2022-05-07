@@ -38,3 +38,26 @@
       name: postgres
       key: port
 {{- end }}
+
+{{- define "commonEnv.mysql" }}
+- name: MYSQL_USERNAME
+  valueFrom:
+    configMapKeyRef:
+      name: mysql
+      key: username
+- name: MYSQL_PASSWORD
+  valueFrom:
+    configMapKeyRef:
+      name: mysql
+      key: password
+- name: MYSQL_HOST
+  valueFrom:
+    configMapKeyRef:
+      name: mysql
+      key: host
+- name: MYSQL_PORT
+  valueFrom:
+    configMapKeyRef:
+      name: mysql
+      key: port
+{{- end }}
