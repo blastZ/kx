@@ -6,5 +6,6 @@ metadata:
   labels:
     {{- toYaml .Values.labels | nindent 4 }}
 data:
-  {{- (.Files.Glob "configmaps/**").AsConfig | nindent 2 }}
+  {{- $path := printf "%s" .Values.configPath }}
+  {{- (.Files.Glob $path).AsConfig | nindent 2 }}
 

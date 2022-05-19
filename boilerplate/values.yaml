@@ -37,3 +37,5 @@ volumeMounts:
     mountPath: /usr/src/app/config.js
     subPath: config.js
     readOnly: true
+
+configPath: configmaps/**
