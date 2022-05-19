@@ -27,7 +27,7 @@ resources:
 volumes:
   - name: REPLACE_WITH_APP_NAME-config
     configMap:
-      name: REPLACE_WITH_APP_NAME-config
+      name: REPLACE_WITH_APP_NAME-config-v1.0.0
       items:
         - key: config.js
           path: config.js
