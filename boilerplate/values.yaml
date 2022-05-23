@@ -38,7 +38,7 @@ volumeMounts:
     subPath: config.js
     readOnly: true
 
-configPath: configmaps/**
+configPath: REPLACE_WITH_CONFIG_PATH
 
 startupProbe:
   httpGet:

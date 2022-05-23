@@ -6,37 +6,13 @@ import inquirer from "inquirer";
 
 import { BOILERPLATE_PATH, WSP_PATH } from "../constants/path.constant.js";
 import { replaceFileContent } from "../utils/replace-file-content.util.js";
-import { appendCommonEnv } from "../utils/append-common-env.util.js";
-import { appendService } from "../utils/append-service.util.js";
 import { getSdkVersion } from "../utils/get-sdk-version.util.js";
-import { namespacePrompt } from "../prompts/namespace.prompt.js";
-import {
-  applicationVersionPrompt,
-  applicationOwnerPrompt,
-} from "../prompts/application/index.js";
-import {
-  serviceTypePrompt,
-  servicePortPrompt,
-  serviceNodePortPrompt,
-} from "../prompts/service/index.js";
-import { commonEnvPrompt } from "../prompts/common-env.prompt.js";
-import { replicaCountPrompt } from "../prompts/replica-count.prompt.js";
-import { probePrompt } from "../prompts/probe.prompt.js";
+import { getValuePromptList } from "../utils/get-value-prompt-list.util.js";
+import { Values } from "../interfaces/values.interface.js";
+import { createValuesFile } from "../utils/create-values-file.util.js";
+import { parseAnswersToValues } from "../utils/parse-answers-to-values.util.js";
 
-async function _createChart(
-  name: string,
-  opts: {
-    namespace: string;
-    appVersion: string;
-    serviceType: string;
-    servicePort: string;
-    commonEnv: string[];
-    owner: string;
-    replicaCount: string;
-    nodePort?: string;
-    probeHttpGetPath: string;
-  },
-) {
+async function _createChart(name: string, values?: Values) {
   const APP_PATH = path.resolve(WSP_PATH, `./${name}`);
 
   try {
@@ -79,66 +55,25 @@ async function _createChart(
         filePath: path.resolve(BOILERPLATE_PATH, "./Chart.yaml"),
         replaceMap: {
           REPLACE_WITH_APP_NAME: name,
-          REPLACE_WITH_APP_VERSION: opts.appVersion,
-        },
-      }),
-    ),
-  );
-
-  fs.writeFileSync(
-    path.resolve(APP_PATH, "./values.yaml"),
-    fs.readFileSync(path.resolve(BOILERPLATE_PATH, "./values.yaml")),
-  );
-
-  appendService(path.resolve(APP_PATH, "./values.yaml"), opts.serviceType);
-
-  appendCommonEnv(path.resolve(APP_PATH, "./values.yaml"), opts.commonEnv);
-
-  fs.writeFileSync(
-    path.resolve(APP_PATH, "./values.yaml"),
-    Buffer.from(
-      replaceFileContent({
-        filePath: path.resolve(APP_PATH, "./values.yaml"),
-        replaceMap: {
-          REPLACE_WITH_NAMESPACE: opts.namespace,
-          REPLACE_WITH_APP_NAME: name,
-          REPLACE_WITH_APP_VERSION: opts.appVersion,
-          REPLACE_WITH_SERVICE_TYPE: opts.serviceType,
-          REPLACE_WITH_SERVICE_PORT: opts.servicePort,
-          REPLACE_WITH_NODE_PORT: opts.nodePort || "",
-          REPLACE_WITH_OWNER: opts.owner,
-          REPLACE_WITH_REPLICA_COUNT: opts.replicaCount,
-          REPLACE_WITH_PROBE_HTTP_GET_PATH: opts.probeHttpGetPath,
+          REPLACE_WITH_APP_VERSION: values ? values.appVersion : "1.0.0",
         },
       }),
     ),
   );
 }
 
-export async function createChart(name: string) {
-  inquirer
-    .prompt([
-      namespacePrompt,
-      applicationVersionPrompt,
-      applicationOwnerPrompt,
-      replicaCountPrompt,
-      commonEnvPrompt,
-      serviceTypePrompt,
-      servicePortPrompt,
-      serviceNodePortPrompt,
-      probePrompt,
-    ])
-    .then(async (answers) => {
-      await _createChart(name, {
-        namespace: answers.namespace,
-        appVersion: answers.appVersion,
-        serviceType: answers.serviceType,
-        servicePort: String(Number(answers.servicePort)),
-        nodePort: String(Number(answers.nodePort)),
-        commonEnv: answers.commonEnv,
-        owner: answers.owner,
-        replicaCount: String(Number(answers.replicaCount)),
-        probeHttpGetPath: answers.probeHttpGetPath,
-      });
+export async function createChart(name: string, cmd: any) {
+  const createValues = cmd.values;
+
+  if (createValues) {
+    inquirer.prompt([...getValuePromptList()]).then(async (answers) => {
+      const values = parseAnswersToValues(answers);
+
+      await _createChart(name, values);
+
+      await createValuesFile(name, values);
     });
+  } else {
+    await _createChart(name);
+  }
 }
