@@ -39,3 +39,25 @@ volumeMounts:
     readOnly: true
 
 configPath: configmaps/**
+
+startupProbe:
+  httpGet:
+    host: localhost
+    port: REPLACE_WITH_SERVICE_PORT
+    path: REPLACE_WITH_PROBE_HTTP_GET_PATH
+  initialDelaySeconds: 3
+  periodSeconds: 5
+  timeoutSeconds: 2
+  successThreshold: 1
+  failureThreshold: 6
+
+livenessProbe:
+  httpGet:
+    host: localhost
+    port: REPLACE_WITH_SERVICE_PORT
+    path: REPLACE_WITH_PROBE_HTTP_GET_PATH
+  initialDelaySeconds: 3
+  periodSeconds: 10
+  timeoutSeconds: 2
+  successThreshold: 1
+  failureThreshold: 3
