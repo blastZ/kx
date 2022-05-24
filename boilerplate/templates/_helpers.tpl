@@ -61,3 +61,65 @@
       name: mysql
       key: port
 {{- end }}
+
+{{- define "commonEnv.sls" }}
+- name: SLS_KEY
+  valueFrom:
+    configMapKeyRef:
+      name: sls
+      key: accessKeyId
+- name: SLS_SECRET
+  valueFrom:
+    configMapKeyRef:
+      name: sls
+      key: accessKeySecret
+{{- end }}
+
+{{- define "commonEnv.amqp" }}
+- name: AMQP_USERNAME
+  valueFrom:
+    configMapKeyRef:
+      name: amqp
+      key: username
+- name: AMQP_PASSWORD
+  valueFrom:
+    configMapKeyRef:
+      name: amqp
+      key: password
+- name: AMQP_HOST
+  valueFrom:
+    configMapKeyRef:
+      name: amqp
+      key: host
+- name: AMQP_PORT
+  valueFrom:
+    configMapKeyRef:
+      name: amqp
+      key: port
+{{- end }}
+
+{{- define "commonEnv.oss" }}
+- name: OSS_ACCESS_KEY_ID
+  valueFrom:
+    configMapKeyRef:
+      name: oss
+      key: accessKeyId
+- name: OSS_ACCESS_KEY_SECRET
+  valueFrom:
+    configMapKeyRef:
+      name: oss
+      key: accessKeySecret
+{{- end }}
+
+{{- define "commonEnv.dingAlert" }}
+- name: DING_ALERT_BASE_URL
+  valueFrom:
+    configMapKeyRef:
+      name: dingding-alert
+      key: baseUrl
+- name: DING_ALERT_SECRET
+  valueFrom:
+    configMapKeyRef:
+      name: dingding-alert
+      key: secret
+{{- end }}

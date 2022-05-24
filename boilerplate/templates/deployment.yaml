@@ -36,6 +36,18 @@ spec:
             {{- if has "redis" .Values.commonEnv }}
               {{- include "commonEnv.redis" . | indent 12 }}
             {{- end }}
+            {{- if has "sls" .Values.commonEnv }}
+              {{- include "commonEnv.sls" . | indent 12 }}
+            {{- end }}
+            {{- if has "amqp" .Values.commonEnv }}
+              {{- include "commonEnv.amqp" . | indent 12 }}
+            {{- end }}
+            {{- if has "oss" .Values.commonEnv }}
+              {{- include "commonEnv.oss" . | indent 12 }}
+            {{- end }}
+            {{- if has "ding-alert" .Values.commonEnv }}
+              {{- include "commonEnv.dingAlert" . | indent 12 }}
+            {{- end }}
           {{- end }}
           startupProbe:
             {{- toYaml .Values.startupProbe | nindent 12 }}
