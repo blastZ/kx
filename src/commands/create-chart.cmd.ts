@@ -1,38 +1,35 @@
-import fs from "fs";
-import path from "path";
 import chalk from "chalk";
-import { $, quiet } from "zx";
+import fs from "fs";
 import inquirer from "inquirer";
+import path from "path";
+import { $ } from "zx";
 
 import { BOILERPLATE_PATH, WSP_PATH } from "../constants/path.constant.js";
-import { replaceFileContent } from "../utils/replace-file-content.util.js";
-import { getSdkVersion } from "../utils/get-sdk-version.util.js";
-import { getValuePromptList } from "../utils/get-value-prompt-list.util.js";
 import { Values } from "../interfaces/values.interface.js";
 import { createValuesFile } from "../utils/create-values-file.util.js";
+import { getSdkVersion } from "../utils/get-sdk-version.util.js";
+import { getValuePromptList } from "../utils/get-value-prompt-list.util.js";
+import { isPathExist } from "../utils/is-path-exist.util.js";
 import { parseAnswersToValues } from "../utils/parse-answers-to-values.util.js";
+import { replaceFileContent } from "../utils/replace-file-content.util.js";
 
 async function _createChart(name: string, values?: Values) {
   const APP_PATH = path.resolve(WSP_PATH, `./${name}`);
 
-  try {
-    fs.statSync(APP_PATH);
-
+  if (await isPathExist(APP_PATH)) {
     return console.log(
       chalk.red.bold(
         `ERR_CHART_NAME_EXIST: the application name "${name}" already exists`,
       ),
     );
-  } catch (err) {}
+  }
 
-  await quiet($`mkdir ${APP_PATH}`);
+  await $`mkdir ${APP_PATH}`.quiet();
 
-  await quiet(
-    $`cp -r ${path.resolve(BOILERPLATE_PATH, "./templates")} ${path.resolve(
-      APP_PATH,
-      `./templates`,
-    )}`,
-  );
+  await $`cp -r ${path.resolve(BOILERPLATE_PATH, "./templates")} ${path.resolve(
+    APP_PATH,
+    `./templates`,
+  )}`.quiet();
 
   fs.writeFileSync(
     path.resolve(APP_PATH, "./sdk.yaml"),
@@ -46,7 +43,7 @@ async function _createChart(name: string, values?: Values) {
     ),
   );
 
-  await quiet($`mkdir ${APP_PATH}/configmaps`);
+  await $`mkdir ${APP_PATH}/configmaps`.quiet();
 
   fs.writeFileSync(
     path.resolve(APP_PATH, "./Chart.yaml"),

@@ -1,21 +1,22 @@
 {
   "name": "@blastz/kx",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "kubernetes app generator",
   "exports": "./dist/index.js",
   "type": "module",
   "dependencies": {
     "chalk": "^5.0.1",
-    "commander": "^9.2.0",
-    "inquirer": "^8.2.4",
-    "zx": "^6.1.0"
+    "commander": "^9.4.0",
+    "deepmerge-ts": "^4.2.2",
+    "inquirer": "^9.1.2",
+    "zx": "^7.0.8"
   },
   "bin": {
     "kx": "./dist/index.js"
   },
   "devDependencies": {
-    "@types/inquirer": "^8.2.1",
-    "typescript": "^4.6.4"
+    "@types/inquirer": "^9.0.1",
+    "typescript": "^4.8.3"
   },
   "scripts": {
     "tsc": "tsc",
