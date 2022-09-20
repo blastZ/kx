@@ -1,11 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  {{- $volume := (first .Values.volumes) }}
-  name: {{ $volume.configMap.name }}
+  name: {{ printf "%s-config-%s" .Values.appName .Values.config.version }}
   namespace: {{ .Values.namespace }}
   labels:
     {{- toYaml .Values.labels | nindent 4 }}
 data:
-  {{- $path := printf "%s" .Values.configPath }}
+  {{- $path := printf "%s" .Values.config.path }}
   {{- (.Files.Glob $path).AsConfig | nindent 2 }}
