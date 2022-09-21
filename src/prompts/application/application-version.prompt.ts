@@ -1,8 +1,10 @@
-import { getCliConfig } from "../../utils/get-cli-config.util.js";
+import { Config } from "../../interfaces/config.interface.js";
 
-export const applicationVersionPrompt = {
-  type: "input",
-  name: "appVersion",
-  message: "The version of application:",
-  default: (await getCliConfig()).prompt.application.version,
+export const applicationVersionPrompt = (config: Config) => {
+  return {
+    type: "input",
+    name: "appVersion",
+    message: "The version of application:",
+    default: config.prompt.application.version,
+  };
 };

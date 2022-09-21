@@ -1,7 +1,7 @@
-import { getCliConfig } from "../utils/get-cli-config.util.js";
+import { Config } from "../interfaces/config.interface.js";
 
-export const commonEnvPrompt = async () => {
-  const options = Object.keys((await getCliConfig()).envs);
+export const commonEnvPrompt = (config: Config) => {
+  const options = Object.keys(config.envs);
 
   return {
     type: "checkbox",

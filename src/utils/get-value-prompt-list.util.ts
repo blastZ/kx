@@ -11,14 +11,17 @@ import {
   servicePortPrompt,
   serviceTypePrompt,
 } from "../prompts/service/index.js";
+import { getCliConfig } from "./get-cli-config.util.js";
 
 export async function getValuePromptList() {
+  const config = await getCliConfig();
+
   return [
-    namespacePrompt,
-    applicationVersionPrompt,
-    applicationOwnerPrompt,
-    replicaCountPrompt,
-    await commonEnvPrompt(),
+    namespacePrompt(config),
+    applicationVersionPrompt(config),
+    applicationOwnerPrompt(config),
+    replicaCountPrompt(config),
+    commonEnvPrompt(config),
     serviceTypePrompt,
     servicePortPrompt,
     serviceNodePortPrompt,

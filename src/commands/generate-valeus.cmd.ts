@@ -1,13 +1,13 @@
 import chalk from "chalk";
-import fs from "fs";
 import inquirer from "inquirer";
 import path from "path";
-import { $, quiet } from "zx";
+import { $ } from "zx";
 
 import { WSP_PATH } from "../constants/path.constant.js";
 import { Values } from "../interfaces/values.interface.js";
 import { createValuesFile } from "../utils/create-values-file.util.js";
 import { getValuePromptList } from "../utils/get-value-prompt-list.util.js";
+import { isPathExist } from "../utils/is-path-exist.util.js";
 import { parseAnswersToValues } from "../utils/parse-answers-to-values.util.js";
 
 async function _generateValues(name: string, values: Values) {
@@ -15,7 +15,7 @@ async function _generateValues(name: string, values: Values) {
     useAppFileName: true,
   });
 
-  await quiet($`mkdir ${path.resolve(WSP_PATH, `./configmaps/${name}`)}`);
+  await $`mkdir ${path.resolve(WSP_PATH, `./configmaps/${name}`)}`.quiet();
 }
 
 export async function generateValues(resource: string, name: string) {
@@ -27,19 +27,15 @@ export async function generateValues(resource: string, name: string) {
     );
   }
 
-  try {
-    fs.statSync(path.resolve(WSP_PATH, `./values-${name}.yaml`));
-
+  if (await isPathExist(path.resolve(WSP_PATH, `./values-${name}.yaml`))) {
     return console.log(
       chalk.red.bold(
         `ERR_VALUES_FILE_EXIST: the values file of application "${name}" already exists`,
       ),
     );
-  } catch (err) {}
+  }
 
-  try {
-    fs.statSync(path.resolve(WSP_PATH, `./Chart.yaml`));
-  } catch (err) {
+  if (!(await isPathExist(path.resolve(WSP_PATH, `./Chart.yaml`)))) {
     return console.log(
       chalk.red.bold(`ERR_CHART_NOT_FOUND: chart don't exist`),
     );
