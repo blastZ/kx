@@ -3,7 +3,7 @@ export interface Values {
   appVersion: string;
   serviceType: string;
   servicePort: string;
-  commonEnv: string[];
+  commonEnv?: string[];
   owner: string;
   replicaCount: string;
   nodePort?: string;

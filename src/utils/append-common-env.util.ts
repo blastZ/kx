@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export function appendCommonEnv(targetPath: string, commonEnv: string[]) {
+export function appendCommonEnv(targetPath: string, commonEnv: string[] = []) {
   if (commonEnv.length > 0) {
     fs.appendFileSync(targetPath, "\n" + "commonEnv:");
 
