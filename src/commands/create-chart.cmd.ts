@@ -5,10 +5,10 @@ import path from "path";
 import { $ } from "zx";
 
 import { BOILERPLATE_PATH, WSP_PATH } from "../constants/path.constant.js";
+import { SdkHelper } from "../helpers/sdk.helper.js";
+import { TemplateHelper } from "../helpers/template.helper.js";
 import { Values } from "../interfaces/values.interface.js";
 import { createValuesFile } from "../utils/create-values-file.util.js";
-import { generateCommonEnvTemplate } from "../utils/generate-common-env-template.util.js";
-import { getSdkVersion } from "../utils/get-sdk-version.util.js";
 import { getValuePromptList } from "../utils/get-value-prompt-list.util.js";
 import { isPathExist } from "../utils/is-path-exist.util.js";
 import { parseAnswersToValues } from "../utils/parse-answers-to-values.util.js";
@@ -27,24 +27,13 @@ async function _createChart(name: string, values?: Values) {
 
   await $`mkdir ${APP_PATH}`.quiet();
 
-  await $`cp -r ${path.resolve(BOILERPLATE_PATH, "./templates")} ${path.resolve(
-    APP_PATH,
-    `./templates`,
-  )}`.quiet();
+  const templateHelper = new TemplateHelper(name);
 
-  await generateCommonEnvTemplate(APP_PATH);
+  await templateHelper.generateTemplates();
 
-  fs.writeFileSync(
-    path.resolve(APP_PATH, "./sdk.yaml"),
-    Buffer.from(
-      replaceFileContent({
-        filePath: path.resolve(BOILERPLATE_PATH, "./sdk.yaml"),
-        replaceMap: {
-          REPLACE_WITH_SDK_VERSION: getSdkVersion(),
-        },
-      }),
-    ),
-  );
+  const sdkHelper = new SdkHelper(name);
+
+  await sdkHelper.updateSdkYamlFile();
 
   await $`mkdir ${APP_PATH}/configmaps`.quiet();
 

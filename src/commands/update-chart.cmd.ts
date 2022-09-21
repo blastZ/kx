@@ -1,31 +1,25 @@
+import chalk from "chalk";
 import path from "path";
-import { $, quiet } from "zx";
-import fs from "fs";
-import { WSP_PATH, BOILERPLATE_PATH } from "../constants/path.constant.js";
-import { replaceFileContent } from "../utils/replace-file-content.util.js";
-import { getSdkVersion } from "../utils/get-sdk-version.util.js";
+
+import { WSP_PATH } from "../constants/path.constant.js";
+import { SdkHelper } from "../helpers/sdk.helper.js";
+import { TemplateHelper } from "../helpers/template.helper.js";
+import { isPathExist } from "../utils/is-path-exist.util.js";
 
 export async function updateChart(name: string) {
   const APP_PATH = path.resolve(WSP_PATH, `./${name}`);
 
-  await quiet($`rm -rf ${path.resolve(APP_PATH, "./templates")}`);
+  if (!(await isPathExist(path.resolve(APP_PATH, "./Chart.yaml")))) {
+    return console.log(
+      chalk.red.bold(`ERR_CHART_NOT_FOUND: chart don't exist`),
+    );
+  }
 
-  await quiet(
-    $`cp -r ${path.resolve(BOILERPLATE_PATH, "./templates")} ${path.resolve(
-      APP_PATH,
-      `./templates`,
-    )}`,
-  );
+  const templateHelper = new TemplateHelper(name);
 
-  fs.writeFileSync(
-    path.resolve(APP_PATH, "./sdk.yaml"),
-    Buffer.from(
-      replaceFileContent({
-        filePath: path.resolve(BOILERPLATE_PATH, "./sdk.yaml"),
-        replaceMap: {
-          REPLACE_WITH_SDK_VERSION: getSdkVersion(),
-        },
-      }),
-    ),
-  );
+  await templateHelper.generateTemplates();
+
+  const sdkHelper = new SdkHelper(name);
+
+  await sdkHelper.updateSdkYamlFile();
 }
