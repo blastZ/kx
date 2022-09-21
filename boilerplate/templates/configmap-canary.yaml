@@ -1,0 +1,14 @@
+{{- if .Values.enableCanary -}}
+{{- if and .Values.config.canaryPath .Values.config.canaryVersion -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-canary-config-%s" .Values.appName .Values.config.canaryVersion }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- toYaml .Values.labels | nindent 4 }}
+data:
+  {{- $path := printf "%s" .Values.config.canaryPath }}
+  {{- (.Files.Glob $path).AsConfig | nindent 2 }}
+{{- end -}}
+{{- end -}}
