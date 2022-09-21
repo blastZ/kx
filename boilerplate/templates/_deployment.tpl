@@ -30,9 +30,17 @@ spec:
         - name: {{ $appName }}
           {{- with .Values.image }}
           {{- if $.isCanary }}
+          {{- if .registry }}
+          image: {{ printf "%s/%s:%s" .registry .repo .canaryTag }}
+          {{- else }}
           image: {{ printf "%s:%s" .repo .canaryTag }}
+          {{- end }}
+          {{- else }}
+          {{- if .registry }}
+          image: {{ printf "%s/%s:%s" .registry .repo .tag }}
           {{- else }}
           image: {{ printf "%s:%s" .repo .tag }}
+          {{- end }}
           {{- end }}
           {{- end }}
           resources:

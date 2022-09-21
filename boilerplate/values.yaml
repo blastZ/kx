@@ -11,7 +11,6 @@ annotations:
 replicaCount: REPLACE_WITH_REPLICA_COUNT
 
 image:
-  namespace: REPLACE_WITH_NAMESPACE
   repo: REPLACE_WITH_APP_NAME
   tag: REPLACE_WITH_APP_VERSION
   pullPolicy: IfNotPresent
