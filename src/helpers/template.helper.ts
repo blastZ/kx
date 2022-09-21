@@ -49,12 +49,12 @@ export class TemplateHelper {
     let templateString = `{{- define "commonEnv.${optionName}" }}\n`;
 
     envs.map((env) => {
-      templateString = templateString.concat(`  - name: ${env.name}
-      valueFrom:
-        configMapKeyRef:
-          name: ${env.configMapKeyRef.name}
-          key: ${env.configMapKeyRef.key}
-  `);
+      templateString = templateString.concat(`- name: ${env.name}
+  valueFrom:
+    configMapKeyRef:
+      name: ${env.configMapKeyRef.name}
+      key: ${env.configMapKeyRef.key}
+`);
     });
 
     templateString = templateString.concat(`{{- end }}`);
