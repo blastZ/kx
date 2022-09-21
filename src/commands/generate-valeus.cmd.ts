@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import inquirer from "inquirer";
-import { $, quiet } from "zx";
-import path from "path";
 import fs from "fs";
+import inquirer from "inquirer";
+import path from "path";
+import { $, quiet } from "zx";
 
 import { WSP_PATH } from "../constants/path.constant.js";
 import { Values } from "../interfaces/values.interface.js";
@@ -18,7 +18,7 @@ async function _generateValues(name: string, values: Values) {
   await quiet($`mkdir ${path.resolve(WSP_PATH, `./configmaps/${name}`)}`);
 }
 
-export function generateValues(resource: string, name: string) {
+export async function generateValues(resource: string, name: string) {
   if (!["values"].includes(resource)) {
     return console.log(
       chalk.red.bold(
@@ -45,7 +45,7 @@ export function generateValues(resource: string, name: string) {
     );
   }
 
-  inquirer.prompt([...getValuePromptList()]).then(async (answers) => {
+  inquirer.prompt([...(await getValuePromptList())]).then(async (answers) => {
     await _generateValues(name, parseAnswersToValues(answers));
   });
 }

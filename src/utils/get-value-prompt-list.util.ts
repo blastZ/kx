@@ -12,13 +12,13 @@ import {
   serviceTypePrompt,
 } from "../prompts/service/index.js";
 
-export function getValuePromptList() {
+export async function getValuePromptList() {
   return [
     namespacePrompt,
     applicationVersionPrompt,
     applicationOwnerPrompt,
     replicaCountPrompt,
-    commonEnvPrompt,
+    await commonEnvPrompt(),
     serviceTypePrompt,
     servicePortPrompt,
     serviceNodePortPrompt,

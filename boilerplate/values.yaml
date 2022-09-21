@@ -6,7 +6,7 @@ labels:
   env: prod
 
 annotations:
-  contact: REPLACE_WITH_OWNER@dtstack.com
+  contact: REPLACE_WITH_OWNER
 
 replicaCount: REPLACE_WITH_REPLICA_COUNT
 

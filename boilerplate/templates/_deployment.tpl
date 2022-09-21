@@ -45,17 +45,8 @@ spec:
             {{- end }}
           {{- if .Values.commonEnv }}
           env:
-            {{- if has "mysql" .Values.commonEnv }}
-              {{- include "commonEnv.mysql" . | indent 12 }}
-            {{- end }}
-            {{- if has "postgres" .Values.commonEnv }}
-              {{- include "commonEnv.postgres" . | indent 12 }}
-            {{- end }}
-            {{- if has "redis" .Values.commonEnv }}
-              {{- include "commonEnv.redis" . | indent 12 }}
-            {{- end }}
-            {{- if has "amqp" .Values.commonEnv }}
-              {{- include "commonEnv.amqp" . | indent 12 }}
+            {{- range $i, $v := .Values.commonEnv }}
+            {{- include (printf "commonEnv.%s" $v) . | indent 12 }}
             {{- end }}
           {{- end }}
           startupProbe:

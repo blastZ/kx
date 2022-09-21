@@ -1,8 +1,10 @@
+import { getCliConfig } from "../utils/get-cli-config.util.js";
+
 export const replicaCountPrompt = {
   type: "input",
   name: "replicaCount",
   message: "The replica count of application:",
-  default: "1",
+  default: (await getCliConfig()).prompt.application.replicaCount,
   validate(input: any) {
     if (
       !input ||

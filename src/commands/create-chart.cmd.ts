@@ -7,6 +7,7 @@ import { $ } from "zx";
 import { BOILERPLATE_PATH, WSP_PATH } from "../constants/path.constant.js";
 import { Values } from "../interfaces/values.interface.js";
 import { createValuesFile } from "../utils/create-values-file.util.js";
+import { generateCommonEnvTemplate } from "../utils/generate-common-env-template.util.js";
 import { getSdkVersion } from "../utils/get-sdk-version.util.js";
 import { getValuePromptList } from "../utils/get-value-prompt-list.util.js";
 import { isPathExist } from "../utils/is-path-exist.util.js";
@@ -30,6 +31,8 @@ async function _createChart(name: string, values?: Values) {
     APP_PATH,
     `./templates`,
   )}`.quiet();
+
+  await generateCommonEnvTemplate(APP_PATH);
 
   fs.writeFileSync(
     path.resolve(APP_PATH, "./sdk.yaml"),
@@ -63,7 +66,7 @@ export async function createChart(name: string, cmd: any) {
   const createValues = cmd.values;
 
   if (createValues) {
-    inquirer.prompt([...getValuePromptList()]).then(async (answers) => {
+    inquirer.prompt([...(await getValuePromptList())]).then(async (answers) => {
       const values = parseAnswersToValues(answers);
 
       await _createChart(name, values);

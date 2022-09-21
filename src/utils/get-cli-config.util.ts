@@ -10,7 +10,13 @@ import { isPathExist } from "./is-path-exist.util.js";
 const defaultConfig: Config = {
   prompt: {
     namespaces: ["default"],
+    application: {
+      owner: "",
+      version: "0.1.0",
+      replicaCount: 1,
+    },
   },
+  envs: {},
 };
 
 let parsedConfig: Config;

@@ -1,6 +1,8 @@
-export const applicationOwnerPrompt = {
+import { getCliConfig } from "../../utils/get-cli-config.util.js";
+
+export const applicationVersionPrompt = {
   type: "input",
-  name: "owner",
-  message: "The owner of application:",
-  default: "yinbing",
+  name: "appVersion",
+  message: "The version of application:",
+  default: (await getCliConfig()).prompt.application.version,
 };
