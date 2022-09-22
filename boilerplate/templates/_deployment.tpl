@@ -69,7 +69,7 @@ spec:
         {{- range $i, $v := .Values.config.mounts }}
         - name: {{ $v.name }}
           configMap:
-            {{- if and $.isCanary ($.Values.canaryDeployment.config | default dict).path ($.Values.canaryDeployment.config | default dict).version }}
+            {{- if and $.isCanary (($.Values.canaryDeployment).config).path (($.Values.canaryDeployment).config).version }}
             name: {{ printf "%s-canary-config-%s" $appName $.Values.canaryDeployment.config.version }}
             {{- else }}
             name: {{ printf "%s-config-%s" $appName $.Values.config.version }}

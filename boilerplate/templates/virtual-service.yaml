@@ -9,7 +9,7 @@ metadata:
   name: {{ $appName }}
   namespace: {{ $namespace }}
 spec:
-  hosts: 
+  hosts:
     - {{ $host }}
   http:
     - match:
