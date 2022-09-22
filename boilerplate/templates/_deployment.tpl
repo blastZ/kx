@@ -31,9 +31,9 @@ spec:
           {{- with .Values.image }}
           {{- if $.isCanary }}
           {{- if .registry }}
-          image: {{ printf "%s/%s:%s" .registry .repo .canaryTag }}
+          image: {{ printf "%s/%s:%s" .registry .repo $.Values.canaryDeployment.image.tag }}
           {{- else }}
-          image: {{ printf "%s:%s" .repo .canaryTag }}
+          image: {{ printf "%s:%s" .repo $.Values.canaryDeployment.image.tag }}
           {{- end }}
           {{- else }}
           {{- if .registry }}
@@ -69,8 +69,8 @@ spec:
         {{- range $i, $v := .Values.config.mounts }}
         - name: {{ $v.name }}
           configMap:
-            {{- if and $.isCanary $.Values.config.canaryPath }}
-            name: {{ printf "%s-canary-config-%s" $appName $.Values.config.canaryVersion }}
+            {{- if and $.isCanary ($.Values.canaryDeployment.config | default dict).path ($.Values.canaryDeployment.config | default dict).version }}
+            name: {{ printf "%s-canary-config-%s" $appName $.Values.canaryDeployment.config.version }}
             {{- else }}
             name: {{ printf "%s-config-%s" $appName $.Values.config.version }}
             {{- end }}

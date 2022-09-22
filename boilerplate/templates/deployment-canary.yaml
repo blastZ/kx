@@ -1,6 +1,6 @@
-{{- if .Values.enableCanary -}}
-{{- with .Values.image.canaryTag }}
+{{- with .Values.canaryDeployment -}}
+{{- if and .enable (.image | default dict).tag -}}
 {{- $data := dict "Values" $.Values "isCanary" true }}
 {{- include "kx.deployment" $data | nindent 0 }}
-{{- end }}
+{{- end -}}
 {{- end -}}
