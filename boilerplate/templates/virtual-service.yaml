@@ -1,0 +1,28 @@
+{{- $appName := .Values.appName -}}
+{{- $namespace := .Values.namespace -}}
+{{- $host := printf "%s.%s.svc.cluster.local" $appName $namespace -}}
+{{- with .Values.canaryDeployment -}}
+{{- if and .enable (.token | default dict).key (.token | default dict).value -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ $appName }}
+  namespace: {{ $namespace }}
+spec:
+  hosts: 
+    - {{ $host }}
+  http:
+    - match:
+        - headers:
+            {{ .token.key }}:
+              exact: {{ .token.value }}
+      route:
+        - destination:
+            host: {{ $host }}
+            subset: canary
+    - route:
+        - destination:
+            host: {{ $host }}
+            subset: stable
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,21 @@
+{{- $appName := .Values.appName -}}
+{{- $namespace := .Values.namespace -}}
+{{- $host := printf "%s.%s.svc.cluster.local" $appName $namespace -}}
+{{- with .Values.canaryDeployment -}}
+{{- if .enable -}}
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ $appName }}
+  namespace: {{ $namespace }}
+spec:
+  host: {{ $host }}
+  subsets:
+    - name: stable
+      labels:
+        version: stable
+    - name: canary
+      labels:
+        version: canary
+{{- end -}}
+{{- end -}}
