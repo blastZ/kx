@@ -2,7 +2,7 @@
 {{- $namespace := .Values.namespace -}}
 {{- $host := printf "%s.%s.svc.cluster.local" $appName $namespace -}}
 {{- with .Values.canaryDeployment -}}
-{{- if and .enable (.token | default dict).key (.token | default dict).value -}}
+{{- if and .enable (.token).key (.token).value (not (has "virtualservice" .skip) ) -}}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
