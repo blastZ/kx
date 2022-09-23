@@ -11,6 +11,13 @@ metadata:
 spec:
   hosts:
     - {{ $host }}
+    {{- if (.gateway).hosts }}
+    {{- .gateway.hosts | toYaml | nindent 4 }}
+    {{- end }}
+  {{- if (.gateway).hosts }}
+  gateways:
+    - {{ $appName }}
+  {{- end }}
   http:
     - match:
         - headers:
