@@ -71,6 +71,7 @@ interface Config {
     gateway?: {
       hosts: string[];
     };
+    skip?: string[];
   };
 }
 ```
