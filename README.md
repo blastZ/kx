@@ -51,6 +51,16 @@ This will create **Canary Deployment**, **VirtualService** and **DestinationRule
 the request with header `canary-token` and the value is `abc123` the traffic will route
 to the **canary** pod otherwise it will goto **stable** pod.
 
+### Use ingress gateway
+
+Add below config into values file
+
+```yaml
+gateway:
+  hosts:
+    - "*.yourdomain.com"
+```
+
 ### Full configuration list
 
 ```ts
@@ -67,9 +77,6 @@ interface Config {
     config?: {
       path: string;
       version: string;
-    };
-    gateway?: {
-      hosts: string[];
     };
     skip?: string[];
   };
