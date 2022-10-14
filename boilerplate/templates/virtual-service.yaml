@@ -1,8 +1,13 @@
 {{- $appName := .Values.appName -}}
 {{- $namespace := .Values.namespace -}}
 {{- $host := printf "%s.%s.svc.cluster.local" $appName $namespace -}}
+
 {{- with .Values.canaryDeployment -}}
-{{- if and .enable (.token).key (.token).value (not (has "virtualservice" .skip) ) -}}
+
+{{- $isCanaryEnabled :=  and .enable (.token).key (.token).value -}}
+{{- $isVirtualServiceSkipped := (has "virtualservice" .skip) -}}
+
+{{- if and $isCanaryEnabled (not $isVirtualServiceSkipped) -}}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -11,10 +16,10 @@ metadata:
 spec:
   hosts:
     - {{ $host }}
-    {{- if (.gateway).hosts }}
-    {{- .gateway.hosts | toYaml | nindent 4 }}
+    {{- if ($.Values.gateway).hosts }}
+    {{- $.Values.gateway.hosts | toYaml | nindent 4 }}
     {{- end }}
-  {{- if (.gateway).hosts }}
+  {{- if ($.Values.gateway).hosts }}
   gateways:
     - {{ $appName }}
   {{- end }}
@@ -32,4 +37,23 @@ spec:
             host: {{ $host }}
             subset: stable
 {{- end -}}
+
+{{- if and $.Values.gateway (not $isCanaryEnabled) -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ $appName }}
+  namespace: {{ $namespace }}
+spec:
+  hosts:
+    - {{ $host }}
+    {{- $.Values.gateway.hosts | toYaml | nindent 4 }}
+  gateways:
+    - {{ $appName }}
+  http:
+    - route:
+        - destination:
+            host: {{ $host }}
+{{- end -}}
+
 {{- end -}}

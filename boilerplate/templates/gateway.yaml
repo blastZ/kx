@@ -1,5 +1,4 @@
-{{- with .Values.canaryDeployment -}}
-{{- if and .enable (.gateway).hosts -}}
+{{- with .Values.gateway -}}
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
@@ -9,10 +8,9 @@ spec:
   selector:
     istio: ingressgateway
   servers:
-    - hosts: {{ .gateway.hosts | toYaml | nindent 8 }}
+    - hosts: {{ .hosts | toYaml | nindent 8 }}
       port:
         name: http
         number: 80
         protocol: http
-{{- end -}}
 {{- end -}}
