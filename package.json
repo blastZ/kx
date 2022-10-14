@@ -1,6 +1,6 @@
 {
   "name": "@blastz/kx",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "kubernetes app generator",
   "exports": "./dist/index.js",
   "type": "module",
