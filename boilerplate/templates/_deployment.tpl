@@ -79,5 +79,9 @@ spec:
   selector:
     matchLabels:
       app: {{ $appName }}
+  {{- if .isCanary }}
+  replicas: {{ .Values.canaryDeployment.replicaCount | default 1 }}
+  {{- else }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
 {{- end }}
