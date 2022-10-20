@@ -56,3 +56,14 @@ livenessProbe:
   timeoutSeconds: 2
   successThreshold: 1
   failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    host: localhost
+    port: REPLACE_WITH_SERVICE_PORT
+    path: REPLACE_WITH_PROBE_HTTP_GET_PATH
+  initialDelaySeconds: 3
+  periodSeconds: 3
+  timeoutSeconds: 2
+  successThreshold: 1
+  failureThreshold: 2
