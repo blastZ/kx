@@ -26,6 +26,10 @@ spec:
         version: stable
         {{- end }}
     spec:
+      {{- if .Values.hostAliases }}
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ $appName }}
           {{- with .Values.image }}
