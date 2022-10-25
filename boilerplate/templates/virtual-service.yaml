@@ -31,10 +31,18 @@ spec:
         - destination:
             host: {{ $host }}
             subset: canary
+            {{- if $.Values.gateway.targetPort }}
+            port:
+              number: {{ $.Values.gateway.targetPort }}
+            {{- end }}
     - route:
         - destination:
             host: {{ $host }}
             subset: stable
+            {{- if $.Values.gateway.targetPort }}
+            port:
+              number: {{ $.Values.gateway.targetPort }}
+            {{- end }}
 {{- end -}}
 {{- end -}}
 
@@ -54,4 +62,8 @@ spec:
     - route:
         - destination:
             host: {{ $host }}
+            {{- if .Values.gateway.targetPort }}
+            port:
+              number: {{ .Values.gateway.targetPort }}
+            {{- end }}
 {{- end -}}
