@@ -3,10 +3,10 @@
 import { program } from "commander";
 import { createChart } from "./commands/create-chart.cmd.js";
 import { generateValues } from "./commands/generate-valeus.cmd.js";
-import { showVersion } from "./commands/show-version.cmd.js";
 import { updateChart } from "./commands/update-chart.cmd.js";
+import { getSdkVersion } from "./utils/get-sdk-version.util.js";
 
-program.option("-v, --version").action(showVersion);
+program.version(getSdkVersion(), "-v --version");
 
 program
   .command("create")
