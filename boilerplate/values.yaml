@@ -37,10 +37,9 @@ config:
 
 startupProbe:
   httpGet:
-    host: localhost
     port: REPLACE_WITH_SERVICE_PORT
     path: REPLACE_WITH_PROBE_HTTP_GET_PATH
-  initialDelaySeconds: 3
+  initialDelaySeconds: 5
   periodSeconds: 5
   timeoutSeconds: 2
   successThreshold: 1
@@ -48,7 +47,6 @@ startupProbe:
 
 livenessProbe:
   httpGet:
-    host: localhost
     port: REPLACE_WITH_SERVICE_PORT
     path: REPLACE_WITH_PROBE_HTTP_GET_PATH
   initialDelaySeconds: 3
@@ -59,7 +57,6 @@ livenessProbe:
 
 readinessProbe:
   httpGet:
-    host: localhost
     port: REPLACE_WITH_SERVICE_PORT
     path: REPLACE_WITH_PROBE_HTTP_GET_PATH
   initialDelaySeconds: 3
