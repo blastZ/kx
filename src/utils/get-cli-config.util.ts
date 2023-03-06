@@ -15,6 +15,10 @@ const defaultConfig: Config = {
       version: "0.1.0",
       replicaCount: 1,
     },
+    config: {
+      version: "v1.0.0",
+      mountPath: "/app/config.js",
+    },
   },
   envs: {},
 };

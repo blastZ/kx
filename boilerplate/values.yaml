@@ -25,10 +25,10 @@ resources:
 
 config:
   path: REPLACE_WITH_CONFIG_PATH
-  version: v1.0.0
+  version: REPLACE_WITH_CONFIG_VERSION
   mounts:
     - name: REPLACE_WITH_APP_NAME-config
-      mountPath: /usr/src/app/config.js
+      mountPath: REPLACE_WITH_CONFIG_MOUNT_PATH
       subPath: config.js
       readOnly: true
       items:

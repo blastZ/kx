@@ -3,6 +3,8 @@ import {
   applicationVersionPrompt,
 } from "../prompts/application/index.js";
 import { commonEnvPrompt } from "../prompts/common-env.prompt.js";
+import { configMountPathPrompt } from "../prompts/config/config-mount-path.prompt.js";
+import { configVersionPrompt } from "../prompts/config/config-version.prompt.js";
 import { namespacePrompt } from "../prompts/namespace.prompt.js";
 import { probePrompt } from "../prompts/probe.prompt.js";
 import { replicaCountPrompt } from "../prompts/replica-count.prompt.js";
@@ -25,6 +27,8 @@ export async function getValuePromptList() {
     serviceTypePrompt,
     servicePortPrompt,
     serviceNodePortPrompt,
+    configVersionPrompt(config),
+    configMountPathPrompt(config),
     probePrompt,
   ];
 }

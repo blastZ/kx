@@ -11,6 +11,8 @@ export function parseAnswersToValues(answers: any) {
     owner: answers.owner,
     replicaCount: String(Number(answers.replicaCount)),
     probeHttpGetPath: answers.probeHttpGetPath,
+    configVersion: answers.configVersion,
+    configMountPath: answers.configMountPath,
   };
 
   return values;

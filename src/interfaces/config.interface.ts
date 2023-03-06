@@ -14,6 +14,10 @@ export interface Config {
       owner: string;
       replicaCount: number;
     };
+    config: {
+      version: string;
+      mountPath: string;
+    };
   };
   envs: {
     [optionName: string]: Env[];

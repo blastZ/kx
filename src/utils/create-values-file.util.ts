@@ -54,6 +54,8 @@ export function createValuesFile(
           REPLACE_WITH_CONFIG_PATH: options.useAppFileName
             ? `configmaps/${name}/**`
             : "configmaps/**",
+          REPLACE_WITH_CONFIG_VERSION: values.configVersion,
+          REPLACE_WITH_CONFIG_MOUNT_PATH: values.configMountPath,
         },
       }),
     ),
