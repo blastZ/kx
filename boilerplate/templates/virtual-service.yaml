@@ -31,7 +31,7 @@ spec:
         - destination:
             host: {{ $host }}
             subset: canary
-            {{- if $.Values.gateway.targetPort }}
+            {{- if ($.Values.gateway).targetPort }}
             port:
               number: {{ $.Values.gateway.targetPort }}
             {{- end }}
@@ -39,7 +39,7 @@ spec:
         - destination:
             host: {{ $host }}
             subset: stable
-            {{- if $.Values.gateway.targetPort }}
+            {{- if ($.Values.gateway).targetPort }}
             port:
               number: {{ $.Values.gateway.targetPort }}
             {{- end }}

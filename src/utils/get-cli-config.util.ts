@@ -11,7 +11,7 @@ const defaultConfig: Config = {
   prompt: {
     namespaces: ["default"],
     application: {
-      owner: "",
+      owner: "unknown",
       version: "0.1.0",
       replicaCount: 1,
     },
