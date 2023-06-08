@@ -78,7 +78,6 @@ interface Config {
       path: string;
       version: string;
     };
-    skip?: string[];
   };
 }
 ```

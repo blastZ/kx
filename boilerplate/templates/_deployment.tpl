@@ -25,6 +25,13 @@ spec:
         {{- else }}
         version: stable
         {{- end }}
+        {{- if (.Values.pod).labels }}
+        {{- toYaml .Values.pod.labels | nindent 8 }}
+        {{- end }}
+      {{- if (.Values.pod).annotations }}
+      annotations:
+        {{- toYaml .Values.pod.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.hostAliases }}
       hostAliases:
@@ -86,8 +93,8 @@ spec:
     matchLabels:
       app: {{ $appName }}
   {{- if .isCanary }}
-  replicas: {{ .Values.canaryDeployment.replicaCount | default 1 }}
+  {{- include "kx.replicas" (dict "replicaCount" .Values.canaryDeployment.replicaCount) | indent 2 }}
   {{- else }}
-  replicas: {{ .Values.replicaCount }}
+  {{- include "kx.replicas" (dict "replicaCount" .Values.replicaCount) | indent 2 }}
   {{- end }}
 {{- end }}

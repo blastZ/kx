@@ -3,10 +3,8 @@
 {{- $host := printf "%s.%s.svc.cluster.local" $appName $namespace -}}
 {{- $isCanaryEnabled :=  and (.Values.canaryDeployment).enable ((.Values.canaryDeployment).token).key ((.Values.canaryDeployment).token).value -}}
 
-
+{{- if $isCanaryEnabled -}}
 {{- with .Values.canaryDeployment -}}
-{{- $isVirtualServiceSkipped := (has "virtualservice" .skip) -}}
-{{- if and $isCanaryEnabled (not $isVirtualServiceSkipped) -}}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -35,6 +33,7 @@ spec:
             port:
               number: {{ $.Values.gateway.targetPort }}
             {{- end }}
+      {{- include "kx.httpRetry" $ | indent 6 }}
     - route:
         - destination:
             host: {{ $host }}
@@ -43,10 +42,11 @@ spec:
             port:
               number: {{ $.Values.gateway.targetPort }}
             {{- end }}
+      {{- include "kx.httpRetry" $ | indent 6 }}
 {{- end -}}
 {{- end -}}
 
-{{- if and .Values.gateway (not $isCanaryEnabled) -}}
+{{- if not $isCanaryEnabled -}}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -55,15 +55,21 @@ metadata:
 spec:
   hosts:
     - {{ $host }}
+    {{- if (.Values.gateway).hosts }}
     {{- .Values.gateway.hosts | toYaml | nindent 4 }}
+    {{- end }}
+  {{- if (.Values.gateway).hosts }}
   gateways:
     - {{ $appName }}
+  {{- end }}
   http:
     - route:
         - destination:
             host: {{ $host }}
-            {{- if .Values.gateway.targetPort }}
+            subset: stable
+            {{- if ($.Values.gateway).targetPort }}
             port:
-              number: {{ .Values.gateway.targetPort }}
+              number: {{ $.Values.gateway.targetPort }}
             {{- end }}
+      {{- include "kx.httpRetry" . | indent 6 }}
 {{- end -}}
