@@ -37,6 +37,27 @@ spec:
       hostAliases:
         {{- toYaml .Values.hostAliases | nindent 8 }}
       {{- end }}
+      {{- if and .isCanary ($.Values.canaryDeployment).nodeSelector }}
+      nodeSelector:
+        {{- toYaml $.Values.canaryDeployment.nodeSelector | nindent 8 }}
+      {{- else if .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if and .isCanary ($.Values.canaryDeployment).affinity }}
+      affinity:
+        {{- toYaml $.Values.canaryDeployment.affinity | nindent 8 }}
+      {{- else if .Values.affinity }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      {{- end }}
+      {{- if and .isCanary ($.Values.canaryDeployment).tolerations }}
+      tolerations:
+        {{- toYaml $.Values.canaryDeployment.tolerations | nindent 8 }}
+      {{- else if .Values.tolerations }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ $appName }}
           {{- with .Values.image }}
@@ -61,6 +82,11 @@ spec:
             {{- $mount := omit $v "name" "items" }}
             - name: {{ $v.name }}
             {{- $mount | toYaml | nindent 14 }}
+            {{- end }}
+            {{- range $i, $v := .Values.pvcMounts }}
+            {{- $pvcMount := omit $v "name" "claimName" }}
+            - name: {{ $v.name }}
+            {{- $pvcMount | toYaml | nindent 14 }}
             {{- end }}
           {{- if .Values.commonEnv }}
           env:
@@ -88,6 +114,11 @@ spec:
             name: {{ printf "%s-config-%s" $appName $.Values.config.version }}
             {{- end }}
             items: {{ $v.items | toYaml | nindent 14 }}
+        {{- end }}
+        {{- range $i, $v := .Values.pvcMounts }}
+        - name: {{ $v.name }}
+          persistentVolumeClaim:
+            claimName: {{ $v.claimName }}
         {{- end }}
   selector:
     matchLabels:
