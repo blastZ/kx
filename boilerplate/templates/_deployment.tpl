@@ -123,9 +123,11 @@ spec:
   selector:
     matchLabels:
       app: {{ $appName }}
+  {{- if not (hasKey .Values "hpa") }}
   {{- if .isCanary }}
   {{- include "kx.replicas" (dict "replicaCount" .Values.canaryDeployment.replicaCount) | indent 2 }}
   {{- else }}
   {{- include "kx.replicas" (dict "replicaCount" .Values.replicaCount) | indent 2 }}
+  {{- end }}
   {{- end }}
 {{- end }}
